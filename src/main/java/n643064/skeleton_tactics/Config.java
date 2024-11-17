@@ -2,13 +2,11 @@ package n643064.skeleton_tactics;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import net.minecraft.client.telemetry.events.WorldLoadEvent;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.event.level.LevelEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -52,9 +50,10 @@ public class Config
     private static InnerConfig CONFIG = new InnerConfig(new HashMap<>());
     static
     {
-        CONFIG.entities.put("minecraft:skeleton", new Entry("minecraft:iron_axe", "minecraft:bow", 4.5d, true, 1.2, 20, 15.0F, 1.2, true));
-        CONFIG.entities.put("minecraft:wither_skeleton", new Entry("minecraft:stone_axe", "minecraft:bow", 7d, true, 1.0, 10, 20.0F, 1.1, true));
-        CONFIG.entities.put("minecraft:stray", new Entry("minecraft:golden_axe", "minecraft:bow", 4.5d, true, 1.0, 20, 15.0F, 1.1, true));
+        CONFIG.entities.put("minecraft:skeleton", new Entry("minecraft:iron_axe", "minecraft:bow", 4d, true, 1.2, 20, 15.0F, 1.2, true));
+        CONFIG.entities.put("minecraft:wither_skeleton", new Entry("minecraft:stone_axe", "minecraft:bow", 7d, true, 1.2, 10, 20.0F, 1.1, true));
+        CONFIG.entities.put("minecraft:stray", new Entry("minecraft:diamond_axe", "minecraft:bow", 4d, true, 1.2, 20, 15.0F, 1.1, true));
+        CONFIG.entities.put("minecraft:bogged", new Entry("minecraft:golden_axe", "minecraft:bow", 2d, true, 1.4, 5, 30.0F, 1.2, true));
 
     }
 

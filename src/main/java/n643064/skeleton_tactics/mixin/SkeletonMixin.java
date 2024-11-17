@@ -17,7 +17,6 @@ import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
-import org.checkerframework.checker.units.qual.A;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -28,22 +27,26 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 @Mixin(AbstractSkeleton.class)
 public abstract class SkeletonMixin extends Monster implements ISkeletonWeapon
 {
-    @Shadow public abstract void setItemSlot(EquipmentSlot slot, ItemStack stack);
-    @Unique private ItemStack skeletonTactics$backup = new ItemStack(Config.getForEntity(getType()).melee());
+    @Shadow @ParametersAreNonnullByDefault
+    public abstract void setItemSlot(EquipmentSlot slot, ItemStack stack);
+    @Unique private ItemStack skeletonTactics$backup = new ItemStack(Config.getForEntity(getType()).ranged());
 
     protected SkeletonMixin(EntityType<? extends Monster> entityType, Level level)
     {
         super(entityType, level);
     }
 
+    @SuppressWarnings("all")
     @Inject(method = "registerGoals", at = @At("TAIL"))
     private void registerGoals(CallbackInfo ci)
     {
         final Config.CachedEntry e = Config.getForEntity(getType());
-        this.goalSelector.addGoal(0, new UpdateWeaponGoal<>((AbstractSkeleton & ISkeletonWeapon) (Object) this, e.distance(), e.dontShootShields()));
+        this.goalSelector.addGoal(3, new UpdateWeaponGoal<>((AbstractSkeleton & ISkeletonWeapon) (Object) this, e.distance(), e.dontShootShields()));
         this.goalSelector.addGoal(4, new SkeletonAttackGoal((AbstractSkeleton) (Object) this,
                 e.meleeFollowAfterLosingLineOfSight(),
                 e.rangedSpeedMod(),
@@ -56,8 +59,15 @@ public abstract class SkeletonMixin extends Monster implements ISkeletonWeapon
     @Inject(method = "finalizeSpawn", at = @At("TAIL"))
     private void finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, SpawnGroupData spawnGroupData, CallbackInfoReturnable<SpawnGroupData> cir)
     {
-        if (!(getMainHandItem().getItem() instanceof BowItem))
+        if (getMainHandItem().isEmpty())
+        {
+            setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Config.getForEntity(getType()).melee()));
             skeletonTactics$backup = new ItemStack(Config.getForEntity(getType()).ranged());
+        } else if ((getMainHandItem().getItem() instanceof BowItem))
+            skeletonTactics$backup = new ItemStack(Config.getForEntity(getType()).melee());
+        else
+            skeletonTactics$backup = new ItemStack(Config.getForEntity(getType()).ranged());
+
     }
     @Inject(method = "readAdditionalSaveData", at = @At("TAIL"))
     private void read(CompoundTag compound, CallbackInfo ci)
@@ -78,7 +88,10 @@ public abstract class SkeletonMixin extends Monster implements ISkeletonWeapon
      * @reason yes
      */
     @Overwrite
-    public void reassessWeaponGoal() {}
+    public void reassessWeaponGoal()
+    {
+
+    }
 
     @Override
     @NotNull
