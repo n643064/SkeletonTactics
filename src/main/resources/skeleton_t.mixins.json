@@ -5,6 +5,8 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "skeleton_t.refmap.json",
   "mixins": [
+    "MobMixin",
+    "SkeletonMixin"
   ],
   "client": [
   ],

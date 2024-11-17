@@ -25,6 +25,9 @@ neoForge {
         mappingsVersion = project.parchment_mappings_version
         minecraftVersion = project.parchment_minecraft_version
     }
+    accessTransformers {
+        file('src/main/resources/META-INF/accesstransformer.cfg')
+    }
 
     // This line is optional. Access Transformers are automatically detected
     // accessTransformers.add('src/main/resources/META-INF/accesstransformer.cfg')
@@ -158,9 +161,4 @@ publishing {
 }
 
 // IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.
-idea {
-    module {
-        downloadSources = true
-        downloadJavadoc = true
-    }
-}
+
