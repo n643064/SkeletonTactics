@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "n643064.skeleton_tactics.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "skeleton_t.refmap.json",
+  "mixins": [
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
